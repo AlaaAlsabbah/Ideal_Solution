@@ -1,12 +1,12 @@
-<div class="afternoon-shift-container"  [ngClass]="{ 'with-border': withBorder }">
 
+
+<div class="afternoon-shift-container" [ngClass]="{ 'with-border': withBorder }">
     <div *ngIf="showToolbar" class="header">
         <div class="toolbar w-100">
             <div class="search-section">
                 <span class="p-input-icon-left w-100">
                     <i class="icon-search"></i>
-                    <input pInputText type="text" placeholder="Search" [(ngModel)]="searchTerm"
-                        (input)="onSearch($event)" class="w-100" />
+                    <input pInputText type="text" placeholder="Search" [formControl]="searchTerm" class="w-100" />
                 </span>
             </div>
 
@@ -21,7 +21,6 @@
         </div>
     </div>
 
-
     <div class="d-flex align-items-center gap-3 mb-3">
         <div>
             <i class="icon-ClockUser-1 fs-2"></i>
@@ -34,70 +33,97 @@
 
     <div class="mb-3">
         <p-table [value]="filteredVehicles" [loading]="vehicles.length === 0" responsiveLayout="scroll">
-
             <ng-template pTemplate="header">
-                <tr>
-                    <th>Vehicle</th>
-                    <th>Plate Num.</th>
-                    <th>Odometer</th>
-                    <th>GPS</th>
-                    <th>Device</th>
-                    <th>SIM</th>
-                    <th>Fleet</th>
-                    <th>
-                        <div class="d-flex align-items-center justify-content-between">
-                            Status <span class="icon-Vector fs-6 bg-light"></span>
-                        </div>
-                    </th>
+                <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="onColumnDrop($event)">
+                    <ng-container *ngFor="let col of columns; let i = index">
+                        <th [attr.data-column]="col.field" cdkDrag [ngClass]="{'cursor-pointer': col.sortable}"
+                        (click)="col.sortable && (col.field === 'vehicle' || col.field === 'plateNum') ? sort(col.field) : null">
+                            <div class="d-flex align-items-center">
+                                <i class="icon-drag_indicator"></i>
+                                <ng-container *ngIf="col.field === 'vehicle'">
+                                    <div class="d-flex align-items-center">
+                                        {{ col.header }}
+                                        <i class="icon-straight-down" [ngClass]="{
+                                            'rotate-180': sortField === 'vehicle' && sortOrder === 1,
+                                            'rotate-0': sortField === 'vehicle' && sortOrder === -1,
+                                            'neutral': sortField !== 'vehicle'
+                                        }"></i>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="col.field === 'plateNum'">
+                                    <div class="d-flex align-items-center">
+                                        {{ col.header }}
+                                        <i class="icon-straight-down" [ngClass]="{
+                                            'rotate-180': sortField === 'plateNum' && sortOrder === 1,
+                                            'rotate-0': sortField === 'plateNum' && sortOrder === -1,
+                                            'neutral': sortField !== 'plateNum'
+                                        }"></i>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="col.field !== 'vehicle' && col.field !== 'plateNum' && col.field !== 'status'">
+                                    {{ col.header }}
+                                </ng-container>
+                                <ng-container *ngIf="col.field === 'status'">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        {{ col.header }} <span class="icon-Vector fs-6 bg-light"></span>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </th>
+                    </ng-container>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-vehicle>
-                <tr>
-                    <td>
-                        <small class="border me-2 rounded px-2 py-1 text-custom"> SUV </small>
-                        <label class="text-decoration-underline"> {{ vehicle.vehicle }} </label>
-                    </td>
-                    <td>{{ vehicle.plateNum }}</td>
-                    <td>{{ vehicle.odometer }}</td>
-                    <td>{{ vehicle.gps }}</td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <span class="device-icon">
-                                <i class="icon-Lightning fs-3"></i>
-                            </span>
+            <ng-template pTemplate="body" let-vehicle let-i="rowIndex">
+                <tr draggable="true" (dragstart)="onDragStart($event, i)" (dragover)="onDragOver($event)"
+                    (drop)="onDrop($event, i)">
+                    <ng-container *ngFor="let col of columns">
+                        <td *ngIf="col.field === 'vehicle'">
+                            <small class="border me-2 rounded px-2 py-1 text-custom"> SUV </small>
+                            <label class="text-decoration-underline"> {{ vehicle.vehicle }} </label>
+                        </td>
+                        <td *ngIf="col.field === 'plateNum'">{{ vehicle.plateNum }}</td>
+                        <td *ngIf="col.field === 'odometer'">{{ vehicle.odometer }}</td>
+                        <td *ngIf="col.field === 'gps'">{{ vehicle.gps }}</td>
+                        <td *ngIf="col.field === 'device'">
+                            <div class="d-flex align-items-center">
+                                <span class="device-icon">
+                                    <i class="icon-Lightning fs-3"></i>
+                                </span>
+                                <label class="d-flex flex-column">
+                                    {{ vehicle.device }} <small> {{ vehicle.deviceNumber }} </small>
+                                </label>
+                            </div>
+                        </td>
+                        <td *ngIf="col.field === 'sim'">
                             <label class="d-flex flex-column">
-                                {{ vehicle.device }} <small> {{ vehicle.deviceNumber }} </small>
+                                {{ vehicle.sim }} <small> {{ vehicle.simSize }} </small>
                             </label>
-                        </div>
-                    </td>
-                    <td>
-                        <label class="d-flex flex-column">
-                            {{ vehicle.sim }} <small> {{ vehicle.simSize }} </small>
-                        </label>
-                    </td>
-                    <td>{{ vehicle.fleet }}</td>
-                    <td>
-                        <div class="dropdown text-end">
-                            <button class="btn btn-outline-light dropdown-toggle btn-sm" type="button"
-                                id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ Active?.name || 'Active' }}
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="actionDropdown">
-                                <li *ngFor="let action of actions">
-                                    <a class="dropdown-item" href="#" (click)="onSelectAction(action)">
-                                        {{ action.name }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
+                        </td>
+                        <td *ngIf="col.field === 'fleet'">{{ vehicle.fleet }}</td>
+                        <td *ngIf="col.field === 'status'">
+                            <div class="dropdown text-end">
+                                <button class="btn btn-outline-light dropdown-toggle btn-sm" type="button"
+                                    id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ Active?.name || 'Active' }}
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="actionDropdown">
+                                    <li *ngFor="let action of actions">
+                                        <a class="dropdown-item" href="#" (click)="onSelectAction(action)">
+                                            {{ action.name }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </ng-container>
                 </tr>
             </ng-template>
         </p-table>
 
-        <div *ngIf="filteredVehicles.length === 0 && searchTerm" class="empty-state">
-            <p>No vehicles found matching "{{ searchTerm }}".</p>
+        <div *ngIf="filteredVehicles.length === 0 && searchTerm.value" class="empty-state">
+            <p>No vehicles found matching "{{ searchTerm.value }}".</p>
         </div>
     </div>
 </div>

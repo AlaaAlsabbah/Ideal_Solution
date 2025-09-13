@@ -1,33 +1,45 @@
 <div class="charts-wrapper flex-wrap">
+  <!-- Main chart cards -->
   <div class="charts-wrapper">
-    <div class="chart-card bg-chart" *ngFor="let stat of chartStats; let i = index">
+    <div class="chart-card bg-chart" *ngFor="let stat of chartStats; let i = index" [@fadeIn]>
       <div class="chart-wrapper">
         <canvas #chartCanvas [id]="'chart-' + i"></canvas>
-        <!-- <div class="chart-label">
-          <div class="percent">{{ stat.value }}%</div>
-        </div> -->
       </div>
       <div class="description">
-        <strong class="mb-2 d-block text-white">{{ stat.used }} /{{ stat.total }} </strong>
-
-         <span class="text-muted"> {{ stat.label }}</span>
+        <strong class="mb-2 d-block text-white">{{ stat.used }} / {{ stat.total }}</strong>
+        <span class="text-muted">{{ stat.label }}</span>
       </div>
     </div>
-  </div>
 
-  <ng-template #loading>
-    <p>Loading stats...</p>
-  </ng-template>
-
-  <div class="charts-wrapper">
-    <div class="chart-card bg-state stat-container" *ngFor="let stat of countStats">
-      <strong class="text-white mb-2">{{ stat.count }}</strong>
-      <span class="text-muted">{{ stat.label }}</span>
+   <!-- Skeleton loader -->
+<div *ngIf="loading">
+  <div class="chart-card bg-chart" *ngFor="let i of [0,1,2,3]" [class.skeleton]="loading" [@fadeIn]>
+    <div class="chart-wrapper" [class.skeleton-box]="loading"></div>
+    <div class="description">
+      <strong class="skeleton-text" *ngIf="loading"></strong>
+      <span class="skeleton-text" *ngIf="loading"></span>
     </div>
   </div>
 </div>
 
-<app-afternoon-shift [withBorder]="true" [showToolbar]="true"></app-afternoon-shift>
+  </div>
 
-<!-- without search + buttons-->
+  <!-- Count stats -->
+  <div class="charts-wrapper">
+    <div class="chart-card bg-state stat-container" *ngFor="let stat of countStats" [@fadeIn]>
+      <strong class="text-white mb-2">{{ stat.count }}</strong>
+      <span class="text-muted">{{ stat.label }}</span>
+    </div>
+
+    <div *ngIf="loading">
+      <div class="chart-card bg-state stat-container skeleton" *ngFor="let i of [0,1,2]" [@fadeIn]>
+        <strong class="skeleton-text"></strong>
+        <span class="skeleton-text"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Afternoon shift components -->
+<app-afternoon-shift [withBorder]="true" [showToolbar]="true"></app-afternoon-shift>
 <app-afternoon-shift [showToolbar]="false"></app-afternoon-shift>

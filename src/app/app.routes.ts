@@ -1,8 +1,22 @@
 import { Routes } from '@angular/router';
-import {  DashboardComponent } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full'
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
 
-    { path: '', component: DashboardComponent, pathMatch: 'full' },
-    { path: 'dashboard', component: DashboardComponent }
+  {
+    path: 'add-user',
+    loadChildren: () => import('./pages/add-user/add-user.module').then(m => m.AddUserModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'dashboard' 
+  }
 ];

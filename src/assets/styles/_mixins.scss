@@ -1,0 +1,29 @@
+@mixin box-shadowSidebar {
+    box-shadow: 99px -1px 10px 0px rgba(24, 26, 27, 0.473);
+    -webkit-box-shadow: 9px -1px 10px 0px rgba(24, 26, 27, 0.473);
+    -moz-box-shadow: 9px -1px 10px 0px rgba(24, 26, 27, 0.473);
+  }
+
+  @mixin flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @mixin borderRadiusLeft {
+    -webkit-border-top-left-radius: 10px;
+    -webkit-border-bottom-left-radius: 10px;
+    -moz-border-radius-topleft: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+
+  @mixin borderRadiusRight {
+    -webkit-border-top-right-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    -moz-border-radius-bottomright: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }

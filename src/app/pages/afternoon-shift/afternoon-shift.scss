@@ -1,11 +1,66 @@
-.drag-handle {
-    cursor: move;
-    display: inline-flex;
-    align-items: center;
-    margin-right: 4px;
-    color: #999;
-}
+.rotate-0 {
+    transform: rotate(0deg);
+    display: inline-block;
+    color: #fff;
+    font-size: 18px;
+  }
+  
+  .rotate-180 {
+    transform: rotate(180deg);
+    display: inline-block;
 
-.drag-handle:hover {
-    color: #00C5D6;
-}
+    color: #fff;
+    font-size: 18px;
+  }
+  
+  .neutral {
+    color: #fff;
+    font-size: 18px;
+  }
+
+
+  
+/* Styles for drag-and-drop and drag indicator */
+.icon-drag_indicator {
+    margin-right: 8px;
+    cursor: move; /* Indicate draggability for headers */
+  }
+  
+  th[cdkDrag]:hover {
+    background-color: #f8f9fa; /* Light highlight on hover */
+  }
+  
+  th[cdkDrag] {
+    // cursor: move; /* Indicate the header can be dragged */
+  }
+  
+  th.cdk-drag-dragging {
+    opacity: 0.6; /* Visual feedback during drag */
+  }
+  
+  tr[draggable="true"]:hover {
+    background-color: #f8f9fa; /* Light highlight on hover */
+  }
+  
+  tr[draggable="true"] {
+    cursor: move; /* Indicate the row can be dragged */
+  }
+  
+  tr.dragging {
+    opacity: 0.6; /* Visual feedback during drag */
+  }
+  
+  .cursor-pointer {
+    cursor: pointer; /* For sortable columns */
+  }
+  
+  /* Ensure CDK drag preview aligns properly */
+  .cdk-drag-preview {
+    background-color: #1F1D2B;
+    color: #9E9BAD;
+  }
+  
+  /* Placeholder styling during drag */
+  .cdk-drag-placeholder {
+    opacity: 0.3;
+  }

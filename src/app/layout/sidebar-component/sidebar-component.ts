@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
@@ -13,12 +13,13 @@ import { SidebarService } from '../../services/sidebar.service';
   imports: [CommonModule, RouterModule, ButtonModule, TooltipModule, RippleModule, TieredMenuModule],
   templateUrl: './sidebar-component.html',
   styleUrl: './sidebar-component.scss'
+
 })
 export class SidebarComponent {
   collapsed = false;
   openMenus: { [key: string]: boolean } = {};
 
-  constructor(private sidebarService: SidebarService) {}
+  constructor(private sidebarService: SidebarService, private router: Router) { }
 
   toggleSidebar() {
     this.collapsed = !this.collapsed;
@@ -31,5 +32,9 @@ export class SidebarComponent {
 
   isSubMenuOpen(menu: string): boolean {
     return !!this.openMenus[menu];
+  }
+
+  isActive(route: string): boolean {
+    return this.router.isActive(route, { paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored' });
   }
 }
