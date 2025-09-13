@@ -1,0 +1,11 @@
+.drag-handle {
+    cursor: move;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 4px;
+    color: #999;
+}
+
+.drag-handle:hover {
+    color: #00C5D6;
+}

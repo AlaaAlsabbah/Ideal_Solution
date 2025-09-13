@@ -1,0 +1,111 @@
+{
+  "charts": [
+    {
+      "id": 1,
+      "count": 5,
+      "label": "Active Trips",
+      "used": 300,
+      "total": 302
+    },
+    {
+      "id": 2,
+      "count": 2,
+      "label": "Active Vehicles",
+      "used": 375,
+      "total": 500
+    },
+    {
+      "id": 3,
+      "count": 8,
+      "label": "Under Maintenance",
+      "used": 16,
+      "total": 20
+    }
+  ],
+  "stats": [
+    {
+      "id": 1,
+      "count": 2,
+      "label": "In-Active Trips"
+    },
+    {
+      "id": 2,
+      "count": 100,
+      "label": "Stopped Vehicles"
+    },
+    {
+      "id": 3,
+      "count": 4,
+      "label": "Queue Maintenance"
+    },
+    {
+      "id": 3,
+      "count": 7,
+      "label": "Total Departments"
+    },
+    {
+      "id": 4,
+      "count": 60,
+      "label": "Total Fleets"
+    },
+    {
+      "id": 4,
+      "count": 300,
+      "label": "Total Drivers"
+    }
+  ],
+  "afternoonShifts": [
+    {
+      "id": "1",
+      "vehicle": "Bus-9265",
+      "plateNum": "04321",
+      "odometer": "55.956 km",
+      "gps": "3-Nov-2024 03:05",
+      "device": "Teltonika",
+      "deviceNumber": "C03-96321",
+      "sim": "Allowance",
+      "simSize": "15GB",
+      "fleet": "Q22",
+      "status": " "
+    },
+    {
+      "id": "2",
+      "vehicle": "Bus-000",
+      "plateNum": "04321",
+      "odometer": "55.956 km",
+      "gps": "3-Nov-2024 03:05",
+      "device": "Teltonika",
+      "deviceNumber": "C03-96321",
+      "sim": "Allowance",
+      "simSize": "15GB",
+      "fleet": "Q22",
+      "status": " "
+    },
+    {
+      "id": "3",
+      "vehicle": "Bus-9265",
+      "plateNum": "04321",
+      "odometer": "55.956 km",
+      "gps": "3-Nov-2024 03:05",
+      "device": "Teltonika",
+      "deviceNumber": "C03-96321",
+      "sim": "Allowance",
+      "simSize": "15GB",
+      "fleet": "Q22",
+      "status": " "
+    },
+       {
+      "id": "4",
+      "vehicle": "Bus-9265",
+      "plateNum": "04321",
+      "odometer": "55.956 km",
+      "gps": "3-Nov-2024 03:05",
+      "device": "Teltonika",
+      "deviceNumber": "C03-96321",
+      "sim": "Allowance",
+      "simSize": "15GB",
+      "fleet": "Q22",
+      "status": " "
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+<div class="afternoon-shift-container"  [ngClass]="{ 'with-border': withBorder }">
+
+    <div *ngIf="showToolbar" class="header">
+        <div class="toolbar w-100">
+            <div class="search-section">
+                <span class="p-input-icon-left w-100">
+                    <i class="icon-search"></i>
+                    <input pInputText type="text" placeholder="Search" [(ngModel)]="searchTerm"
+                        (input)="onSearch($event)" class="w-100" />
+                </span>
+            </div>
+
+            <div class="action-buttons">
+                <button pButton label="Export" icon="pi pi-download" class="p-button-outlined" (click)="onExport()">
+                    <span class="icon-DownloadSimple"></span>
+                </button>
+                <button pButton label="Import" icon="pi pi-upload" class="p-button-outlined" (click)="onImport()">
+                    <span class="icon-UploadSimple"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <div>
+            <i class="icon-ClockUser-1 fs-2"></i>
+        </div>
+        <div>
+            <h2>Afternoon Shift</h2>
+            <div class="shift-info">12:00 PM - 06:00 PM</div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <p-table [value]="filteredVehicles" [loading]="vehicles.length === 0" responsiveLayout="scroll">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Vehicle</th>
+                    <th>Plate Num.</th>
+                    <th>Odometer</th>
+                    <th>GPS</th>
+                    <th>Device</th>
+                    <th>SIM</th>
+                    <th>Fleet</th>
+                    <th>
+                        <div class="d-flex align-items-center justify-content-between">
+                            Status <span class="icon-Vector fs-6 bg-light"></span>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-vehicle>
+                <tr>
+                    <td>
+                        <small class="border me-2 rounded px-2 py-1 text-custom"> SUV </small>
+                        <label class="text-decoration-underline"> {{ vehicle.vehicle }} </label>
+                    </td>
+                    <td>{{ vehicle.plateNum }}</td>
+                    <td>{{ vehicle.odometer }}</td>
+                    <td>{{ vehicle.gps }}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <span class="device-icon">
+                                <i class="icon-Lightning fs-3"></i>
+                            </span>
+                            <label class="d-flex flex-column">
+                                {{ vehicle.device }} <small> {{ vehicle.deviceNumber }} </small>
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <label class="d-flex flex-column">
+                            {{ vehicle.sim }} <small> {{ vehicle.simSize }} </small>
+                        </label>
+                    </td>
+                    <td>{{ vehicle.fleet }}</td>
+                    <td>
+                        <div class="dropdown text-end">
+                            <button class="btn btn-outline-light dropdown-toggle btn-sm" type="button"
+                                id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ Active?.name || 'Active' }}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="actionDropdown">
+                                <li *ngFor="let action of actions">
+                                    <a class="dropdown-item" href="#" (click)="onSelectAction(action)">
+                                        {{ action.name }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <div *ngIf="filteredVehicles.length === 0 && searchTerm" class="empty-state">
+            <p>No vehicles found matching "{{ searchTerm }}".</p>
+        </div>
+    </div>
+</div>

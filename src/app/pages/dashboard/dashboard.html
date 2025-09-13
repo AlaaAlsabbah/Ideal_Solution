@@ -1,0 +1,33 @@
+<div class="charts-wrapper flex-wrap">
+  <div class="charts-wrapper">
+    <div class="chart-card bg-chart" *ngFor="let stat of chartStats; let i = index">
+      <div class="chart-wrapper">
+        <canvas #chartCanvas [id]="'chart-' + i"></canvas>
+        <!-- <div class="chart-label">
+          <div class="percent">{{ stat.value }}%</div>
+        </div> -->
+      </div>
+      <div class="description">
+        <strong class="mb-2 d-block text-white">{{ stat.used }} /{{ stat.total }} </strong>
+
+         <span class="text-muted"> {{ stat.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <p>Loading stats...</p>
+  </ng-template>
+
+  <div class="charts-wrapper">
+    <div class="chart-card bg-state stat-container" *ngFor="let stat of countStats">
+      <strong class="text-white mb-2">{{ stat.count }}</strong>
+      <span class="text-muted">{{ stat.label }}</span>
+    </div>
+  </div>
+</div>
+
+<app-afternoon-shift [withBorder]="true" [showToolbar]="true"></app-afternoon-shift>
+
+<!-- without search + buttons-->
+<app-afternoon-shift [showToolbar]="false"></app-afternoon-shift>
