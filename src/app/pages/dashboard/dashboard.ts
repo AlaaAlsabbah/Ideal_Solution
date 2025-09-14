@@ -1,36 +1,23 @@
 import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ChangeDetectorRef, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { trigger, transition, style, animate, animateChild, animate as animateFn } from '@angular/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton'; // Added
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 import { ChartStat, CountStat } from '../../helperApi/model';
 import { Service } from '../../services/requestApi';
 import { AfternoonShift } from '../afternoon-shift/afternoon-shift';
-
+import { combineLatest, timer } from 'rxjs';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TableModule, InputTextModule, ButtonModule, AfternoonShift],
+  imports: [CommonModule, ReactiveFormsModule, TableModule, InputTextModule, ButtonModule, SkeletonModule, AfternoonShift], // Added SkeletonModule
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss'],
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('2s ease-out', style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        animate('2s ease-in', style({ opacity: 0 }))
-      ])
-    ])
-  ]
-  
-  
+  styleUrls: ['./dashboard.scss']
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('chartCanvas') chartCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
@@ -47,30 +34,22 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
-    this.service.getChartStats().subscribe({
-      next: (data) => {
-        this.chartStats = data.map(item => ({
+    combineLatest([
+      this.service.getChartStats(),
+      this.service.getCountStats(),
+      timer(1500)
+    ]).subscribe({
+      next: ([chartData, countData]) => {
+        this.chartStats = chartData.map(item => ({
           ...item,
           value: item.total && item.used ? Math.round((item.used / item.total) * 100) : 0
         }));
+        this.countStats = countData;
         this.loading = false;
         if (isPlatformBrowser(this.platformId)) this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error fetching chart stats:', err);
-        this.loading = false;
-        if (isPlatformBrowser(this.platformId)) this.cdr.detectChanges();
-      }
-    });
-
-    this.service.getCountStats().subscribe({
-      next: (data) => {
-        this.countStats = data;
-        this.loading = false;
-        if (isPlatformBrowser(this.platformId)) this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error fetching count stats:', err);
+        console.error('Error fetching stats:', err);
         this.loading = false;
         if (isPlatformBrowser(this.platformId)) this.cdr.detectChanges();
       }

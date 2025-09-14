@@ -34,7 +34,7 @@ body {
   padding: 0;
   background-color: $background-primaryColor;
   font-family: $font-familyBase;
-
+  overflow-x: hidden;
 }
 
 .layout {
@@ -330,7 +330,6 @@ body {
 
   &.skeleton {
     background: $secondary-color;
-    animation: pulse 6s ease-in-out infinite;
   }
 
   .chart-wrapper {
@@ -339,10 +338,13 @@ body {
     height: 70px;
     margin: 0 auto;
 
-    &.skeleton-box {
-      background: #2A2A3D;
+    .p-skeleton {
+      background: #2a2f42;
       border-radius: 50%;
-      animation: pulse 6s ease-in-out infinite;
+    }
+
+    .p-skeleton.fade-in {
+      animation: fadeIn 1s ease-in-out infinite alternate;
     }
   }
 
@@ -354,38 +356,36 @@ body {
     strong {
       font-size: 12px;
     }
-  }
 
-  .skeleton-text {
-    display: inline-block;
-    background: #2A2A3D;
-    border-radius: 4px;
-    animation: pulse 6s ease-in-out infinite;
-    height: 12px;
-    margin: 2px 0;
-
-    &:first-child {
-      width: 60%;
+    .p-skeleton {
+      background: #2a2f42;
+      border-radius: 4px;
     }
 
-    &:last-child {
+    .p-skeleton.fade-in {
+      animation: fadeIn 1s ease-in-out infinite alternate;
+    }
+
+    .p-skeleton:first-child {
+      width: 60%;
+      height: 12px;
+      margin-bottom: 2px;
+    }
+
+    .p-skeleton:last-child {
       width: 80%;
+      height: 12px;
     }
   }
 }
 
 /* Animation for skeleton loader */
-@keyframes pulse {
-  0% {
-    opacity: 0.8;
+@keyframes fadeIn {
+  from {
+    opacity: 0.3;
   }
-
-  50% {
-    opacity: 0.6;
-  }
-
-  100% {
-    opacity: 0.8;
+  to {
+    opacity: 0.7;
   }
 }
 
@@ -440,7 +440,7 @@ canvas {
     margin-bottom: 0;
     color: $text-colorSecondary;
     font-size: 12px;
-    font-family: 'Poppins bold';
+    font-family: $font-familySemiBold;
     text-shadow: none;
   }
 
@@ -537,6 +537,8 @@ canvas {
 
     }
 
+
+
     .p-datatable-tbody>tr:hover {
       background: $secondary-color;
     }
@@ -559,6 +561,7 @@ canvas {
     }
   }
 }
+
 
 
 .with-border {

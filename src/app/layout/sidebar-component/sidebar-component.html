@@ -1,7 +1,10 @@
-<nav class="sidebar" [class.collapsed]="collapsed">
+<nav class="sidebar" [class.collapsed]="collapsed"> 
   <div class="sidebar-logo">
-    <img *ngIf="!collapsed" src="logo.svg" class="img-fluid" alt="Ideal Solutions" />
-    <img *ngIf="collapsed" src="logoSmall.svg" class="img-fluid" alt="Collapsed Logo" />
+    @if (!collapsed) {
+      <img src="logo.svg" class="img-fluid" alt="Ideal Solutions" />
+    } @else {
+      <img src="logoSmall.svg" class="img-fluid" alt="Collapsed Logo" />
+    }
   </div>
 
   <div class="sidebar-collpseMenu">
@@ -11,89 +14,72 @@
   </div>
 
   <ul class="menu">
-    <li>
-      <a routerLink="/dashboard" class="menu-item active">
-        <div class="d-flex align-items-center gap-2 custom-label">
-          <div class="icon-sec">
-            <i class="icon-dashboard2"><i class="path1"></i><i class="path2"></i></i>
-          </div>
-          <label class="mb-0">Dashboard</label>
-        </div>
-      </a>
-    </li>
-
-    <li>
-      <a routerLink="/users" class="menu-item">
-        <div class="d-flex align-items-center gap-2 custom-label">
-          <div class="icon-sec">
-            <i class="icon-ClipboardText"><i class="path1"></i><i class="path2"></i></i>
-          </div>
-          <label  class="mb-0">Report</label>
-        </div>
-      </a>
-    </li>
-
-
-
-
-    <li class="has-submenu" [class.open]="isSubMenuOpen('Organization')">
-      <a (click)="toggleSubMenu('Organization'); $event.preventDefault()" class="menu-item">
-        <div class="d-flex align-items-center gap-2 custom-label">
-          <div class="icon-sec">
-            <i class="icon-Gear"><i class="path1"></i><i class="path2"></i></i>
-          </div>
-          <label  class="mb-0">Organization</label>
-        </div>
-        <span class="arrow" *ngIf="!collapsed" [class.open]="isSubMenuOpen('Organization')">
-          <span class="icon-keyboard_arrow_down"></span>
-        </span>
-      </a>
-
-      <ul class="submenu" [class.float-submenu]="collapsed" *ngIf="isSubMenuOpen('Organization')">
-        <li *ngIf="collapsed">
-          <h6>
-            Assets
-          </h6>
-        </li>
-        <li *ngIf="collapsed">
-          <a href="#">
-            <div class="d-flex align-items-center gap-3">
+    @for (item of menu; track $index) {
+      <li [class.has-submenu]="item.subMenu" [class.open]="isSubMenuOpen(item.label)">
+        
+        <!-- Regular menu item -->
+        @if (!item.subMenu) {
+          <a [routerLink]="item.route" class="menu-item" [class.active]="isActive(item.route!)">
+            <div class="d-flex align-items-center gap-2 custom-label">
               <div class="icon-sec">
-                <i class="icon-Receipt"><i class="path1"></i><i class="path2"></i></i>
+                <i class="{{ item.icon }}"><i class="path1"></i><i class="path2"></i></i>
               </div>
-              <label class="mb-0 d-flex align-items-center justify-content-between w-100">
-                Invoices
-              </label>
+              <label class="mb-0">{{ item.label }}</label>
             </div>
           </a>
-        </li>
+        }
 
-
-        <li>
-          <a routerLink="/add-user" class="menu-item">
-            <div class="d-flex align-items-center gap-2">
+        <!-- Submenu -->
+        @if (item.subMenu) {
+          <a (click)="toggleSubMenu(item.label); $event.preventDefault()" class="menu-item">
+            <div class="d-flex align-items-center gap-2 custom-label">
               <div class="icon-sec">
-                <i class="icon-UsersThree"><i class="path1"></i><i class="path2"></i></i>
+                <i class="{{ item.icon }}"><i class="path1"></i><i class="path2"></i></i>
               </div>
-              <label class="mb-0 d-flex align-items-center justify-content-between w-100">
-                Users
-                <button class="btn btn-primary btn-rounded" routerLink="/add-user">
-                  <i class="icon-Plus"></i>
-                </button>
-              </label>
+              <label class="mb-0">{{ item.label }}</label>
             </div>
+            @if (!collapsed) {
+              <span class="arrow" [class.open]="isSubMenuOpen(item.label)">
+                <span class="icon-keyboard_arrow_down"></span>
+              </span>
+            }
           </a>
-        </li>
-      </ul>
-    </li>
 
+          @if (isSubMenuOpen(item.label)) {
+            <ul class="submenu" [class.float-submenu]="collapsed">
+              @for (sub of item.subMenu; track $index) {
+                <li>
+                  <a [routerLink]="sub.route || null" class="menu-item">
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="icon-sec">
+                        <i class="{{ sub.icon }}"><i class="path1"></i><i class="path2"></i></i>
+                      </div>
+                      <label class="mb-0 d-flex align-items-center justify-content-between w-100">
+                        {{ sub.label }}
+                        @if (sub.label === 'Users') {
+                          <button class="btn btn-primary btn-rounded" routerLink="/add-user">
+                            <i class="icon-Plus"></i>
+                          </button>
+                        }
+                      </label>
+                    </div>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        }
+      </li>
+    }
   </ul>
 
   <div class="sidebar-user">
     <img src="profile.svg" class="img-fluid" alt="John Doe" />
-    <div class="profile-sec d-flex flex-column" *ngIf="!collapsed">
-      <strong>John Doe</strong>
-      <small>Admin</small>
-    </div>
+    @if (!collapsed) {
+      <div class="profile-sec d-flex flex-column">
+        <strong>John Doe</strong>
+        <small>Admin</small>
+      </div>
+    }
   </div>
 </nav>

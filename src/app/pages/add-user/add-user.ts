@@ -34,6 +34,17 @@ export class AddUser implements OnInit {
   roles: Role[] = [];
   departments: Department[] = [];
   isLoading: boolean = true;
+  skeletonFields = [
+    { colClass: 'col-md-4' },
+    { colClass: 'col-md-4' },
+    { colClass: 'col-md-4' },
+    { colClass: 'col-md-12' },
+    { colClass: 'col-md-12' },
+    { colClass: 'col-md-12' },
+    { colClass: 'col-md-12' },
+    { colClass: 'col-md-12' },
+    { colClass: 'col-md-12' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -42,6 +53,7 @@ export class AddUser implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('AddUser: ngOnInit started');
     this.userForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       middleName: [''],
@@ -61,6 +73,7 @@ export class AddUser implements OnInit {
       timer(1500) 
     ]).subscribe({
       next: ([users, roles, departments]) => {
+        console.log('AddUser: Data fetched successfully', { users, roles, departments });
         this.roles = roles;
         this.departments = departments;
 
@@ -69,6 +82,7 @@ export class AddUser implements OnInit {
           this.userId = user.id;
           this.userForm.patchValue(user);
           this.uploadedImage = user.image || null;
+          console.log('AddUser: Form prefilled with user', user);
         }
         this.isLoading = false; 
       },
@@ -89,17 +103,20 @@ export class AddUser implements OnInit {
   }
 
   onImageUpload(event: any) {
+    console.log('AddUser: Image upload triggered', event);
     const file: File = event.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.uploadedImage = e.target?.result ?? null;
+        console.log('AddUser: Image loaded', this.uploadedImage);
       };
       reader.readAsDataURL(file);
     }
   }
 
   onSubmit() {
+    console.log('AddUser: onSubmit triggered', this.userForm.value);
     if (!this.userForm.valid) {
       const errors: string[] = [];
       if (this.userForm.get('firstName')?.hasError('required')) {
@@ -124,6 +141,7 @@ export class AddUser implements OnInit {
         errors.push('Department is required');
       }
 
+      console.log('AddUser: Validation errors', errors);
       Swal.fire({
         title: 'Validation Error',
         html: errors.join('<br>') || 'Please fill all required fields',
@@ -142,11 +160,13 @@ export class AddUser implements OnInit {
       id: this.userId || Date.now().toString(),
       image: this.uploadedImage ? this.uploadedImage.toString() : ''
     };
+    console.log('AddUser: Submitting user data', userData);
 
     this.isLoading = true; 
     if (this.userId) {
       this.service.updateUser(this.userId, userData).subscribe({
         next: (response) => {
+          console.log('AddUser: User updated successfully', response);
           Swal.fire({
             title: 'Success',
             text: 'User updated successfully',
@@ -158,6 +178,7 @@ export class AddUser implements OnInit {
             color: '#c7c7d3'
           });
           setTimeout(() => {
+            console.log('AddUser: Navigating to /dashboard after delay');
             this.router.navigate(['/dashboard']);
           }, 3000); 
         },
@@ -178,6 +199,7 @@ export class AddUser implements OnInit {
     } else {
       this.service.createUser(userData).subscribe({
         next: (response) => {
+          console.log('AddUser: User created successfully', response);
           Swal.fire({
             title: 'Success',
             text: 'User created successfully',
@@ -189,6 +211,7 @@ export class AddUser implements OnInit {
             color: '#c7c7d3'
           });
           setTimeout(() => {
+            console.log('AddUser: Navigating to /dashboard after delay');
             this.router.navigate(['/dashboard']);
           }, 3000);
         },
@@ -210,6 +233,7 @@ export class AddUser implements OnInit {
   }
 
   onCancel() {
+    console.log('AddUser: onCancel triggered');
     this.router.navigate(['/dashboard']);
   }
 }
