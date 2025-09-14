@@ -110,11 +110,11 @@
   ],
   "users": [
     {
-      "firstName": "Ahmed",
-      "middleName": "Jasim2",
+      "firstName": "alaa",
+      "middleName": "Jasim",
       "lastName": "Ali",
       "email": "Ahmed.Ali@Company.com",
-      "phone": "+974 3333 4444",
+      "phone": "(974) 333-3444",
       "rfid": "12345",
       "role": "super_admin",
       "department": "fire_fighter",

@@ -4,11 +4,13 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { User, Role, Department } from '../../helperApi/model';
 import { Service } from '../../services/requestApi';
-import { combineLatest } from 'rxjs';
+import { combineLatest, timer } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-user',
@@ -19,7 +21,8 @@ import { combineLatest } from 'rxjs';
     FileUploadModule,
     InputTextModule,
     InputMaskModule,
-    ButtonModule
+    ButtonModule,
+    SkeletonModule
   ],
   templateUrl: './add-user.html',
   styleUrls: ['./add-user.scss']
@@ -30,6 +33,7 @@ export class AddUser implements OnInit {
   userId: string | null = null;
   roles: Role[] = [];
   departments: Department[] = [];
+  isLoading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -50,27 +54,36 @@ export class AddUser implements OnInit {
       fleet: ['']
     });
 
-    // Fetch users, roles, and departments concurrently
     combineLatest([
       this.service.getUsers(),
       this.service.getRoles(),
-      this.service.getDepartments()
+      this.service.getDepartments(),
+      timer(1500) 
     ]).subscribe({
       next: ([users, roles, departments]) => {
-        // Set roles and departments
         this.roles = roles;
         this.departments = departments;
 
-        // Prefill form with first user if available
         if (users && users.length > 0) {
           const user = users[0];
           this.userId = user.id;
           this.userForm.patchValue(user);
           this.uploadedImage = user.image || null;
         }
+        this.isLoading = false; 
       },
       error: (err) => {
-        console.error('Error fetching data:', err);
+        console.error('AddUser: Error fetching data', err);
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to load data. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          background: '#1e2230',
+          color: '#c7c7d3',
+          confirmButtonColor: '#28a745'
+        });
+        this.isLoading = false; 
       }
     });
   }
@@ -87,34 +100,112 @@ export class AddUser implements OnInit {
   }
 
   onSubmit() {
-    if (this.userForm.valid) {
-      const userData: User = {
-        ...this.userForm.value,
-        id: this.userId || Date.now().toString(),
-        image: this.uploadedImage ? this.uploadedImage.toString() : ''
-      };
-
-      if (this.userId) {
-        this.service.updateUser(this.userId, userData).subscribe({
-          next: () => {
-            console.log('User updated successfully');
-            this.router.navigate(['/dashboard']);
-          },
-          error: (err) => {
-            console.error('Error updating user:', err);
-          }
-        });
-      } else {
-        this.service.createUser(userData).subscribe({
-          next: () => {
-            console.log('User created successfully');
-            this.router.navigate(['/dashboard']);
-          },
-          error: (err) => {
-            console.error('Error creating user:', err);
-          }
-        });
+    if (!this.userForm.valid) {
+      const errors: string[] = [];
+      if (this.userForm.get('firstName')?.hasError('required')) {
+        errors.push('First Name is required');
+      } else if (this.userForm.get('firstName')?.hasError('minlength')) {
+        errors.push('First Name must be at least 2 characters');
       }
+      if (this.userForm.get('lastName')?.hasError('required')) {
+        errors.push('Last Name is required');
+      } else if (this.userForm.get('lastName')?.hasError('minlength')) {
+        errors.push('Last Name must be at least 2 characters');
+      }
+      if (this.userForm.get('email')?.hasError('required')) {
+        errors.push('Email is required');
+      } else if (this.userForm.get('email')?.hasError('email')) {
+        errors.push('Email must be a valid email address');
+      }
+      if (this.userForm.get('role')?.hasError('required')) {
+        errors.push('Role is required');
+      }
+      if (this.userForm.get('department')?.hasError('required')) {
+        errors.push('Department is required');
+      }
+
+      Swal.fire({
+        title: 'Validation Error',
+        html: errors.join('<br>') || 'Please fill all required fields',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        background: '#1e2230',
+        color: '#c7c7d3',
+        confirmButtonColor: '#dc3545'
+      });
+      this.userForm.markAllAsTouched(); 
+      return;
+    }
+
+    const userData: User = {
+      ...this.userForm.value,
+      id: this.userId || Date.now().toString(),
+      image: this.uploadedImage ? this.uploadedImage.toString() : ''
+    };
+
+    this.isLoading = true; 
+    if (this.userId) {
+      this.service.updateUser(this.userId, userData).subscribe({
+        next: (response) => {
+          Swal.fire({
+            title: 'Success',
+            text: 'User updated successfully',
+            icon: 'success',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            background: '#1e2230',
+            color: '#c7c7d3'
+          });
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 3000); 
+        },
+        error: (err) => {
+          console.error('AddUser: Error updating user', err);
+          Swal.fire({
+            title: 'Error',
+            text: 'Error updating user. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            background: '#1e2230',
+            color: '#c7c7d3',
+            confirmButtonColor: '#dc3545'
+          });
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.service.createUser(userData).subscribe({
+        next: (response) => {
+          Swal.fire({
+            title: 'Success',
+            text: 'User created successfully',
+            icon: 'success',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            background: '#1e2230',
+            color: '#c7c7d3'
+          });
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 3000);
+        },
+        error: (err) => {
+          console.error('AddUser: Error creating user', err);
+          Swal.fire({
+            title: 'Error',
+            text: 'Error creating user. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            background: '#1e2230',
+            color: '#c7c7d3',
+            confirmButtonColor: '#dc3545'
+          });
+          this.isLoading = false;
+        }
+      });
     }
   }
 
