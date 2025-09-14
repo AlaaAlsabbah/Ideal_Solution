@@ -1,4 +1,17 @@
 @font-face {
+    font-family: 'Poppins SemiBold';
+    src: url('Poppins-SemiBold.eot');
+    src: url('Poppins-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('Poppins-SemiBold.woff2') format('woff2'),
+        url('Poppins-SemiBold.woff') format('woff'),
+        url('Poppins-SemiBold.ttf') format('truetype'),
+        url('Poppins-SemiBold.svg#Poppins-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
     font-family: 'Poppins';
     src: url('Poppins-Regular.eot');
     src: url('Poppins-Regular.eot?#iefix') format('embedded-opentype'),
@@ -12,14 +25,14 @@
 }
 
 @font-face {
-    font-family: 'Poppins bold';
-    src: url('Poppins-Black.eot');
-    src: url('Poppins-Black.eot?#iefix') format('embedded-opentype'),
-        url('Poppins-Black.woff2') format('woff2'),
-        url('Poppins-Black.woff') format('woff'),
-        url('Poppins-Black.ttf') format('truetype'),
-        url('Poppins-Black.svg#Poppins-Black') format('svg');
-    font-weight: 900;
+    font-family: 'Poppins Light';
+    src: url('Poppins-Light.eot');
+    src: url('Poppins-Light.eot?#iefix') format('embedded-opentype'),
+        url('Poppins-Light.woff2') format('woff2'),
+        url('Poppins-Light.woff') format('woff'),
+        url('Poppins-Light.ttf') format('truetype'),
+        url('Poppins-Light.svg#Poppins-Light') format('svg');
+    font-weight: 300;
     font-style: normal;
     font-display: swap;
 }

@@ -1,14 +1,100 @@
-<div class="container">
-    <h2>Add New User</h2>
-    <form>
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" class="form-control" placeholder="Enter username">
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" class="form-control" placeholder="Enter email">
-      </div>
-      <button type="submit" class="btn btn-primary">Save User</button>
-    </form>
+<div class="page-header gap-2">
+  <div class="d-flex align-items-center gap-3"> 
+    <button pButton type="button" icon="icon-arrow-left2" class="p-button-text" (click)="onCancel()"></button>
+    <div class="title">
+      <h2 class="mb-0">Add User</h2>
+      <small class="d-block"> Organization </small>
+    </div>
   </div>
+  
+  <div class="p-formgroup-inline">
+    <p-button type="button" label="Cancel" class="p-button-secondary" (click)="onCancel()"></p-button>
+    <p-button type="submit" label="Save" [disabled]="!userForm.valid" severity="success" (click)="onSubmit()" />
+  </div>
+</div>
+
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
+  <div class="container">
+    <div class="p-field fileUpload">
+      <!-- Image Preview -->
+      <div class="image-preview">
+        <img *ngIf="uploadedImage; else placeholder" [src]="uploadedImage" alt="Preview" />
+        <ng-template #placeholder>
+          <div class="placeholder-text">No image uploaded</div>
+        </ng-template>
+      </div>
+      <p-fileUpload mode="basic" chooseLabel="Update Image" chooseIcon="icon-camera" accept="image/*" [auto]="true"
+        [customUpload]="true" [maxFileSize]="1000000" (uploadHandler)="onImageUpload($event)">
+      </p-fileUpload>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="p-field">
+          <label for="firstName">First Name <span class="text-danger"> * </span> </label>
+          <input id="firstName" type="text" pInputText formControlName="firstName">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-field">
+          <label for="middleName">Middle Name</label>
+          <input id="middleName" type="text" pInputText formControlName="middleName">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-field">
+          <label for="lastName">Last Name <span class="text-danger"> * </span> </label>
+          <input id="lastName" type="text" pInputText formControlName="lastName">
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="p-field">
+          <label for="email">Email <span class="text-danger"> * </span> </label>
+          <input id="email" type="email" pInputText formControlName="email">
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="p-field">
+          <label for="phone">Phone</label>
+          <p-inputMask id="phone" mask="(999) 999-9999" formControlName="phone"></p-inputMask>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="p-field">
+          <label for="rfid">RFID</label>
+          <input id="rfid" type="text" pInputText formControlName="rfid">
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="p-field">
+          <label for="role">Role <span class="text-danger"> * </span></label>
+          <select id="role" formControlName="role" required>
+            <option value="">Select a Role</option>
+            <option *ngFor="let role of roles" [value]="role.value">{{ role.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="p-field">
+          <label for="department">Department <span class="text-danger"> * </span></label>
+          <select id="department" formControlName="department" required>
+            <option value="">Select a Department</option>
+            <option *ngFor="let dept of departments" [value]="dept.value">{{ dept.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="p-field">
+          <label for="fleet">Fleet</label>
+          <input id="fleet" type="text" pInputText formControlName="fleet">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

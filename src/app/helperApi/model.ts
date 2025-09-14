@@ -23,6 +23,32 @@ export interface AfternoonShiftVehicle {
   status: string;
 }
 
+export interface User {
+  id: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  rfid: string;
+  role: string;
+  department: string;
+  fleet: string;
+  image?: string; 
+}
+
+
+export interface Role {
+  id: string;
+  label: string;
+  value: string;
+}
+
+export interface Department {
+  id: string;
+  label: string;
+  value: string;
+}
 
 export interface action {
     name: string;
