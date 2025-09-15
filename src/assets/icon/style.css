@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?ez6q4t');
-  src:  url('fonts/icomoon.eot?ez6q4t#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?ez6q4t') format('truetype'),
-    url('fonts/icomoon.woff?ez6q4t') format('woff'),
-    url('fonts/icomoon.svg?ez6q4t#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?alnrl8');
+  src:  url('fonts/icomoon.eot?alnrl8#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?alnrl8') format('truetype'),
+    url('fonts/icomoon.woff?alnrl8') format('woff'),
+    url('fonts/icomoon.svg?alnrl8#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-Gear1 .path1:before {
+  content: "\f333";
+  color: rgb(0, 197, 214);
+  opacity: 0.5;
+}
+.icon-Gear1 .path2:before {
+  content: "\f334";
+  margin-left: -0.9697265625em;
+  color: rgb(0, 197, 214);
+}
 .icon-PhoneCall:before {
   content: "\f331";
   color: #cecbde;
@@ -35,6 +45,7 @@
 }
 .icon-straight-down:before {
   content: "\f330";
+  color: #464353;
 }
 .icon-Lightning:before {
   content: "\f32d";
@@ -105,13 +116,12 @@
 }
 .icon-dashboard2 .path1:before {
   content: "\f329";
-  /* color: rgb(158, 155, 173); */
+  color: rgb(158, 155, 173);
   opacity: 0.5;
 }
 .icon-dashboard2 .path2:before {
   content: "\f32a";
   margin-left: -1em;
-  /* color: rgb(37, 40, 54); */
 }
 .icon-error:before {
   content: "\e900";

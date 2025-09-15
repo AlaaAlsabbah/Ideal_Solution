@@ -1,9 +1,15 @@
 <nav class="sidebar" [class.collapsed]="collapsed"> 
   <div class="sidebar-logo">
     @if (!collapsed) {
-      <img src="logo.svg" class="img-fluid" alt="Ideal Solutions" />
+      <a routerLink="/">
+        <img src="logo.svg" class="img-fluid" alt="Ideal Solutions" />
+      </a>
+   
     } @else {
-      <img src="logoSmall.svg" class="img-fluid" alt="Collapsed Logo" />
+      <a routerLink="/">
+        <img src="logoSmall.svg" class="img-fluid" alt="Collapsed Logo" />
+      </a>
+     
     }
   </div>
 
@@ -48,7 +54,7 @@
           @if (isSubMenuOpen(item.label)) {
             <ul class="submenu" [class.float-submenu]="collapsed">
               @if (collapsed) {
-              <li>
+              <li class="bg-custom">
                 <h6>Assets</h6>
               </li>
             }
@@ -64,7 +70,7 @@
                         {{ sub.label }}
                 
                         <!-- Only show add-user button for Users -->
-                        <button *ngIf="sub.label === 'Users'" class="btn btn-primary btn-rounded p-1 px-2" routerLink="/add-user">
+                        <button *ngIf="sub.label === 'Users'" class="btn btn-primary btn-rounded p-1 px-2" (click)="goToAddUser()">
                           <i class="icon-Plus"></i>
                         </button>
                       </label>

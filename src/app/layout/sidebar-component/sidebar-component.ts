@@ -70,4 +70,14 @@ export class SidebarComponent {
       matrixParams: 'ignored'
     });
   }
+
+
+  goToAddUser() {
+    this.router.navigate(['/add-user']).then(() => {
+      this.openMenus = {};
+      this.collapsed = true;
+      this.sidebarService.setCollapsed(this.collapsed);
+    });
+  }
+  
 }
