@@ -30,7 +30,7 @@ export class AfternoonShift implements OnInit {
   actions: action[] | undefined;
   Active: action | undefined;
   sortField: keyof Pick<AfternoonShiftVehicle, 'vehicle' | 'plateNum'> = 'vehicle';
-  sortOrder: number = 1; // 1 for ascending, -1 for descending
+  sortOrder: number = 1;
   dragStartIndex: number | null = null;
   columns: { field: keyof AfternoonShiftVehicle; header: string; sortable: boolean }[] = [
     { field: 'vehicle', header: 'Vehicle', sortable: true },
@@ -60,7 +60,7 @@ export class AfternoonShift implements OnInit {
       error: (err) => console.error('Error fetching afternoon shift vehicles:', err)
     });
 
-    // Subscribe to searchTerm value changes with debounce
+
     this.searchTerm.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -84,9 +84,10 @@ export class AfternoonShift implements OnInit {
     });
   }
 
-  onSelectAction(action: action): void {
-    this.Active = action;
+  onSelectAction(vehicle: AfternoonShiftVehicle, action: action): void {
+    vehicle.activeAction = action;
   }
+  
 
   onSearch(term: string): void {
     const searchTerm = term.toLowerCase();
@@ -120,7 +121,6 @@ export class AfternoonShift implements OnInit {
     XLSX.writeFile(wb, 'AfternoonShift.xlsx'); 
   }
 
-  // 🔹 IMPORT
   onImport(): void {
     const input = document.createElement('input');
     input.type = 'file';
@@ -151,14 +151,13 @@ export class AfternoonShift implements OnInit {
         }));
         
 
-        // 🔹 Merge with existing list
         this.vehicles = [...this.vehicles, ...importedVehicles];
         this.filteredVehicles = [...this.vehicles];
       };
       reader.readAsArrayBuffer(file);
     };
 
-    input.click(); // trigger hidden file input
+    input.click();
   }
 
 
@@ -168,7 +167,7 @@ export class AfternoonShift implements OnInit {
   }
 
   onDragOver(event: DragEvent): void {
-    event.preventDefault(); // Allow dropping
+    event.preventDefault();
   }
 
   onDrop(event: DragEvent, dropIndex: number): void {

@@ -4,32 +4,39 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { SkeletonModule } from 'primeng/skeleton'; // Added
+import { SkeletonModule } from 'primeng/skeleton';
+import { ToastModule } from 'primeng/toast';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 import { ChartStat, CountStat } from '../../helperApi/model';
 import { Service } from '../../services/requestApi';
 import { AfternoonShift } from '../afternoon-shift/afternoon-shift';
 import { combineLatest, timer } from 'rxjs';
+import { MessageService } from 'primeng/api';
+
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TableModule, InputTextModule, ButtonModule, SkeletonModule, AfternoonShift], // Added SkeletonModule
+  imports: [CommonModule, ReactiveFormsModule, TableModule, InputTextModule, ButtonModule, SkeletonModule, ToastModule, AfternoonShift],
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss']
+  styleUrls: ['./dashboard.scss'],
+  providers: [MessageService]
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('chartCanvas') chartCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
   chartStats: (ChartStat & { value: number })[] = [];
   countStats: CountStat[] = [];
-  private charts: Chart[] = [];
+  totalDistanceDriven: string = '';
+  totalHoursDriven: string = '';
   loading: boolean = true;
+  private charts: Chart[] = [];
 
   constructor(
     private service: Service,
     private cdr: ChangeDetectorRef,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -44,12 +51,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           ...item,
           value: item.total && item.used ? Math.round((item.used / item.total) * 100) : 0
         }));
-        this.countStats = countData;
+        this.countStats = countData.filter(stat => !['Total Distance Driven', 'Total Hours Driven'].includes(stat.label));
+        this.totalDistanceDriven = countData.find(stat => stat.label === 'Total Distance Driven')?.value || '0 km';
+        this.totalHoursDriven = countData.find(stat => stat.label === 'Total Hours Driven')?.value || '0 hr : 0 min';
         this.loading = false;
         if (isPlatformBrowser(this.platformId)) this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error fetching stats:', err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load dashboard data' });
         this.loading = false;
         if (isPlatformBrowser(this.platformId)) this.cdr.detectChanges();
       }

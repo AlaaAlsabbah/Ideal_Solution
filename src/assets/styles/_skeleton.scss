@@ -1,19 +1,5 @@
 @use 'variables' as *;
-@use 'responsive' as *;
 @use 'mixins' as *;
-
-
-:root {
-  /* success button colors */
-  --p-button-success-background: #28a745;
-  --p-button-success-border: #28a745;
-  --p-button-success-color: #ffffff;
-
-  /* primary button colors */
-  --p-button-primary-background: #007bff;
-  --p-button-primary-border: #007bff;
-  --p-button-primary-color: #ffffff;
-}
 
 .btn-primary {
   background-color: $primary-color;
@@ -39,7 +25,36 @@ body {
 
 .layout {
   display: flex;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      padding-top: 10px;
+    }
+
+    .main-content {
+      padding: 10px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      padding-top: 10px;
+    }
+
+    .main-content {
+      padding: 5px;
+    }
+  }
 }
+
 
 .main-content {
   flex: 1;
@@ -59,13 +74,109 @@ body {
   position: relative;
   @include box-shadowSidebar;
 
+  .sidebar-logo {
+    @media (max-width: 576px) {
+      display: inline !important;
+
+      img{
+        max-width: 100px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      display: inline !important;
+
+      img{
+        max-width: 100px;
+      }
+    }
+  }
+
+
+  .sidebar-collpseMenu {
+    @media (max-width: 576px) {
+      display: inline !important;
+      float: right;
+      margin: 0 !important;
+      background: inherit !important;
+    }
+
+    @media (max-width: 600px) {
+      display: inline !important;
+      float: right;
+      margin: 0 !important;
+      background: inherit !important;
+    }
+  }
+
+
+  .sidebar-collpseMenu {
+
+    @media (max-width: 567px) {
+      display: inline !important;
+      float: right;
+      margin: 0 !important;
+      background: inherit !important;
+    }
+
+    @media (max-width: 600px) {
+      display: inline !important;
+      float: right;
+      margin: 0 !important;
+      background: inherit !important;
+    }
+  }
+
   &.collapsed {
     width: 100px;
     overflow: visible;
 
+    .sidebar-user {
+      @media (max-width: 576px) {
+        position: absolute;
+        margin: 15px 10px;
+        top: 10px;
+        right: 40px;
+      }
+  
+  
+      @media (max-width: 600px) {
+        position: absolute;
+        margin: 15px 10px;
+        top: 10px;
+        right: 40px;
+      }
+    }
+
+ @media (max-width: 576px) {
+      width: inherit;
+      max-height: 70px;
+      overflow: hidden;
+    }
+
+    .sidebar-logo {
+      @media (max-width: 576px) {
+        display: inline !important;
+        padding: 10px;
+      }
+    }
+
+    .sidebar-collpseMenu {
+      @media (max-width: 576px) {
+        display: inline !important;
+        padding: 10px;
+      }
+    }
+
+   
+
     .custom-label {
       flex-direction: column;
       font-size: 12px;
+
+      @media (max-width: 576px) {
+        flex-direction: inherit;
+      }
     }
 
     .menu {
@@ -74,15 +185,20 @@ body {
       height: 50%;
       animation: centerMenu 1s ease-out;
 
+
+      @media (max-width: 576px) {
+        align-items: start;
+      }
+
       @keyframes centerMenu {
         from {
           opacity: 0;
-          transform: translateX(-20px);
+          transform: translateX(20px);
         }
 
         to {
           opacity: 1;
-          transform: translateX(0);
+          transform: translatey(0);
         }
       }
     }
@@ -126,7 +242,7 @@ body {
 
       h6 {
         border-bottom: 1px solid #5f5f5f;
-        padding: 20px;
+        padding: 29px 20px;
       }
     }
 
@@ -136,11 +252,57 @@ body {
       &.open {
         background: linear-gradient(90deg, $primary-color 2%, rgb(42, 42, 61) 93%);
         @include borderRadiusLeft;
+
+        a.menu-item {
+          .custom-label {
+            line-height: 1;
+
+            label {
+              visibility: hidden;
+            }
+
+            .icon-sec {
+              font-size: 25px;
+              padding-top: 15px;
+              background: inherit;
+
+              i {
+                &::before {
+                  color: $primary-color;
+                }
+              }
+            }
+          }
+
+        }
       }
 
       &:hover {
         background: linear-gradient(90deg, $primary-color 2%, rgb(42, 42, 61) 93%);
         @include borderRadiusLeft;
+
+        a.menu-item {
+          .custom-label {
+            line-height: 1;
+
+            label {
+              visibility: hidden;
+            }
+
+            .icon-sec {
+              font-size: 25px;
+              padding-top: 15px;
+              background: inherit;
+
+              i {
+                &::before {
+                  color: $primary-color;
+                }
+              }
+            }
+          }
+
+        }
       }
 
       .float-submenu {
@@ -173,16 +335,17 @@ body {
 
   .sidebar-collpseMenu {
     background-color: $secondary-color;
-    padding: 5px;
+    padding:0px;
     display: block;
     text-align: center;
     margin: 1rem 0;
 
     button {
-      color: inherit;
+      color: $text-colorSecondary;
       text-decoration: none;
       font-size: 24px;
       transition: all 1s;
+      padding: 0px 10px !important;
 
       &:hover {
         color: $primary-color;
@@ -219,7 +382,7 @@ body {
       cursor: pointer;
       color: $text-color;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 12px;
 
 
       &.active {
@@ -234,14 +397,14 @@ body {
 
       .icon-sec {
         background: $background-primaryColor;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         color: $text-color;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 10px;
-        font-size: 16px;
+        font-size: 30px;
       }
     }
 
@@ -274,33 +437,53 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    position: absolute;
-    bottom: 20px;
-    left: 15px;
-
+    margin: 30px 10px;
     img {
       width: 50px;
     }
+
   }
 }
 
 .charts-wrapper {
   display: flex;
+  flex-wrap: wrap; 
   gap: 1rem;
-  justify-content: space-around;
-}
+  justify-content: center;
 
-.layout.collapsed {
-  .main-content {
-    .charts-wrapper {
-      .chart-card {
-        width: 140px !important;
+  .chart-card {
+    flex: 1 1 auto;
+    max-width: 140px;
+  }
 
-      }
+  @media (max-width: 600px) {
+
+    .chart-card {
+      flex: 1 1 calc(50% - 1rem);
+      max-width: calc(50% - 1rem);
+    }
+  }
+
+  @media (max-width: 579px) {
+    .chart-card {
+      flex: 1 1 calc(32.33% - 0.5rem);
+      max-width: calc(32.33% - 0.5rem);
     }
   }
 }
 
+
+
+.mobile-only {
+  display: none !important; 
+}
+
+
+@media (max-width: 600px) {
+  .mobile-only {
+    display: flex !important;
+  }
+}
 
 .chart-card {
   position: relative;
@@ -310,10 +493,7 @@ body {
   text-align: center;
   color: white;
 
-  &.bg-state {
-    background: $secondary-color;
-  }
-
+ 
   &.bg-chart {
     background: $secondary-color;
   }
@@ -379,11 +559,18 @@ body {
   }
 }
 
+
+.bg-state {
+  background: $secondary-color;
+}
+
+
 /* Animation for skeleton loader */
 @keyframes fadeIn {
   from {
     opacity: 0.3;
   }
+
   to {
     opacity: 0.7;
   }
@@ -453,8 +640,6 @@ canvas {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-
   }
 
   .toolbar {
@@ -490,14 +675,18 @@ canvas {
       button {
         box-shadow: rgba(0, 0, 0, 0.75) 0px 1px 2px 0px;
         -webkit-box-shadow: rgba(0, 0, 0, 0.75) 0px 1px 2px 0px;
-        ;
         -moz-box-shadow: rgba(0, 0, 0, 0.75) 0px 1px 2px 0px;
-        ;
         padding: .5rem 1.5rem;
         border-radius: 10px;
         gap: 10px;
         transition: all 1s;
         font-size: 12px;
+
+        span.p-button-label {
+          @media (max-width: 576px) {
+            display: none;
+          }
+        }
 
         &:hover {
           background-color: #10141A;
@@ -515,11 +704,30 @@ canvas {
       padding: 10px;
       font-weight: 700;
       font-size: 12px;
+  
+
+      @media (max-width: 576px) { 
+        padding: 5px 30px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        .w-100-custom{
+          min-width: 100% !important;
+        }
+      }
+  
+      @media (max-width: 600px) {   
+        padding: 5px 30px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        .w-100-custom{
+          min-width: 100% !important;
+        }
+      }
+
 
       .bg-light {
-        box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
-        -webkit-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
         padding: .5rem .75rem;
         border-radius: 10px;
 
@@ -534,6 +742,8 @@ canvas {
       border-bottom: 1px solid #464353;
       padding: 10px;
       font-size: 12px;
+
+      
 
     }
 
@@ -629,6 +839,7 @@ canvas {
   from {
     opacity: 0.3;
   }
+
   to {
     opacity: 0.7;
   }
@@ -700,12 +911,22 @@ canvas {
     color: #c7c7d3;
 
     h2 {
-      font-size: 18px;
+      font-size: 12px;
     }
 
     small {
       font-size: 12px;
       font-family: $font-familySemiBold;
+    }
+  }
+
+
+  .header-btns{
+    button{
+      &.btn-link{
+            color:$text-colorSecondary;
+      }
+      font-family: $font-familyLight;
     }
   }
 }
@@ -731,7 +952,8 @@ canvas {
       display: block;
       margin-bottom: 5px;
       font-family: $font-familyLight;
-      color: #c7c7d3;
+      color: #9E9BAD;
+      font-size: 14px;
     }
 
     input {
@@ -748,9 +970,7 @@ canvas {
     margin-top: 20px;
     justify-content: flex-end;
 
-    .p-button {
-      margin-left: 10px;
-    }
+
   }
 
   .error-message {
@@ -758,4 +978,9 @@ canvas {
     font-size: 12px;
     margin-top: 5px;
   }
+
+}
+.form-check-input:checked {
+  background-color: $primary-color;
+  border-color: $primary-color;
 }

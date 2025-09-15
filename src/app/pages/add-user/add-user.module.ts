@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // For form inputs
+import { FormsModule } from '@angular/forms'; 
 import { AddUser } from './add-user';
 
 const routes: Routes = [

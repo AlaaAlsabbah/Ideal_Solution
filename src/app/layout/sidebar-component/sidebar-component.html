@@ -47,8 +47,14 @@
 
           @if (isSubMenuOpen(item.label)) {
             <ul class="submenu" [class.float-submenu]="collapsed">
+              @if (collapsed) {
+              <li>
+                <h6>Assets</h6>
+              </li>
+            }
               @for (sub of item.subMenu; track $index) {
-                <li>
+              
+                <li *ngIf="!(!collapsed && sub.label === 'Invoices')">
                   <a [routerLink]="sub.route || null" class="menu-item">
                     <div class="d-flex align-items-center gap-2">
                       <div class="icon-sec">
@@ -56,15 +62,16 @@
                       </div>
                       <label class="mb-0 d-flex align-items-center justify-content-between w-100">
                         {{ sub.label }}
-                        @if (sub.label === 'Users') {
-                          <button class="btn btn-primary btn-rounded" routerLink="/add-user">
-                            <i class="icon-Plus"></i>
-                          </button>
-                        }
+                
+                        <!-- Only show add-user button for Users -->
+                        <button *ngIf="sub.label === 'Users'" class="btn btn-primary btn-rounded p-1 px-2" routerLink="/add-user">
+                          <i class="icon-Plus"></i>
+                        </button>
                       </label>
                     </div>
                   </a>
                 </li>
+                
               }
             </ul>
           }

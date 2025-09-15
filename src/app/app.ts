@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class App implements OnInit, OnDestroy {
   protected readonly title = 'ideal';
   isCollapsed = false;
-  private subscription!: Subscription; // Use ! to assert it will be assigned
+  private subscription!: Subscription; 
 
   constructor(private sidebarService: SidebarService) {}
 
@@ -25,6 +25,6 @@ export class App implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe(); // Clean up subscription
+    this.subscription.unsubscribe();
   }
 }

@@ -23,44 +23,40 @@
 /* Styles for drag-and-drop and drag indicator */
 .icon-drag_indicator {
     margin-right: 8px;
-    cursor: move; /* Indicate draggability for headers */
+    cursor: move; 
   }
   
   th[cdkDrag]:hover {
-    background-color: #f8f9fa; /* Light highlight on hover */
+    background-color: #f8f9fa; 
   }
   
-  th[cdkDrag] {
-    // cursor: move; /* Indicate the header can be dragged */
-  }
+
   
   th.cdk-drag-dragging {
-    opacity: 0.6; /* Visual feedback during drag */
+    opacity: 0.6;
   }
   
   tr[draggable="true"]:hover {
-    background-color: #f8f9fa; /* Light highlight on hover */
+    background-color: #f8f9fa; 
   }
   
   tr[draggable="true"] {
-    cursor: move; /* Indicate the row can be dragged */
+    cursor: move; 
   }
   
   tr.dragging {
-    opacity: 0.6; /* Visual feedback during drag */
+    opacity: 0.6; 
   }
   
   .cursor-pointer {
-    cursor: pointer; /* For sortable columns */
+    cursor: pointer; 
   }
   
-  /* Ensure CDK drag preview aligns properly */
   .cdk-drag-preview {
     background-color: #1F1D2B;
     color: #9E9BAD;
   }
   
-  /* Placeholder styling during drag */
   .cdk-drag-placeholder {
     opacity: 0.3;
   }

@@ -6,7 +6,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { SidebarService } from '../../services/sidebar.service';
-import { MenuItem } from '../../helperApi/model';   // ✅ import model
+import { MenuItem } from '../../helperApi/model';  
 
 @Component({
   selector: 'app-sidebar',
@@ -16,10 +16,9 @@ import { MenuItem } from '../../helperApi/model';   // ✅ import model
   styleUrl: './sidebar-component.scss'
 })
 export class SidebarComponent {
-  collapsed = false;
+  collapsed = true;
   openMenus: { [key: string]: boolean } = {};
-
-  // ✅ Typed menu array
+  
   menu: MenuItem[] = [
     {
       label: 'Dashboard',

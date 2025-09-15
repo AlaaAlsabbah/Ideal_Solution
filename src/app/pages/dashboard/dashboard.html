@@ -1,52 +1,72 @@
 <div class="charts-wrapper">
-  <!-- Main chart cards -->
-  <div class="charts-wrapper">
-    @if (!loading) {
-      @for (stat of chartStats; track $index) {
-        <div class="chart-card bg-chart">
-          <div class="chart-wrapper">
-            <canvas #chartCanvas [id]="'chart-' + $index"></canvas>
-          </div>
-          <div class="description">
-            <strong class="mb-2 d-block text-white">{{ stat.used }} / {{ stat.total }}</strong>
-            <span class="text-muted">{{ stat.label }}</span>
-          </div>
+  @if (!loading) {
+    @for (stat of chartStats; track stat.id) {
+      <div class="chart-card bg-chart">
+        <div class="chart-wrapper">
+          <canvas #chartCanvas [id]="'chart-' + stat.id"></canvas>
         </div>
-      }
-    } @else {
-      <!-- Skeleton loader -->
-      @for (i of [0,1,2,3]; track $index) {
-        <div class="chart-card bg-chart skeleton">
-          <div class="chart-wrapper">
-            <p-skeleton shape="circle" size="70px" styleClass="fade-in"></p-skeleton>
-          </div>
-          <div class="description">
-            <p-skeleton width="60%" height="12px" styleClass="fade-in mb-2"></p-skeleton>
-            <p-skeleton width="80%" height="12px" styleClass="fade-in"></p-skeleton>
-          </div>
-        </div>
-      }
-    }
-  </div>
-
-  <!-- Count stats -->
-  <div class="charts-wrapper">
-    @if (!loading) {
-      @for (stat of countStats; track $index) {
-        <div class="chart-card bg-state stat-container">
-          <strong class="text-white mb-2">{{ stat.count }}</strong>
+        <div class="description">
+          <strong class="mb-2 d-block text-white">{{ stat.used }} / {{ stat.total }}</strong>
           <span class="text-muted">{{ stat.label }}</span>
         </div>
-      }
-    } @else {
-      @for (i of [0,1,2]; track $index) {
-        <div class="chart-card bg-state stat-container skeleton">
+      </div>
+    }
+  } @else {
+    @for (i of [0,1,2,3]; track $index) {
+      <div class="chart-card bg-chart skeleton">
+        <div class="chart-wrapper">
+          <p-skeleton shape="circle" size="70px" styleClass="fade-in"></p-skeleton>
+        </div>
+        <div class="description">
           <p-skeleton width="60%" height="12px" styleClass="fade-in mb-2"></p-skeleton>
           <p-skeleton width="80%" height="12px" styleClass="fade-in"></p-skeleton>
         </div>
-      }
+      </div>
     }
+  }
+
+  @if (!loading) {
+    @for (stat of countStats; track stat.id) {
+      <div class="chart-card bg-state stat-container">
+        <strong class="text-white mb-2">{{ stat.count }}</strong>
+        <span class="text-muted">{{ stat.label }}</span>
+      </div>
+    }
+  } @else {
+    @for (i of [0,1,2]; track $index) {
+      <div class="chart-card bg-state stat-container skeleton">
+        <p-skeleton width="60%" height="12px" styleClass="fade-in mb-2"></p-skeleton>
+        <p-skeleton width="80%" height="12px" styleClass="fade-in"></p-skeleton>
+      </div>
+    }
+  }
+
+  @if (!loading) {
+    <!-- Mobile-only section -->
+  <div class="d-flex gap-3 mobile-only">
+    <div class="bg-state stat-container  d-flex flex-column align-items-center justify-content-center p-3 rounded">
+      <small class="text-white mb-2 fw-bold">{{ totalDistanceDriven }}</small>
+      <small class="text-muted">Total Distance Driven</small>
+    </div>
+    <div class="bg-state stat-container  d-flex flex-column align-items-center justify-content-center p-3 rounded">
+      <small class="text-white mb-2 fw-bold">{{ totalHoursDriven }}</small>
+      <small class="text-muted">Total Hours Driven</small>
+    </div>
   </div>
+} @else {
+  <!-- Skeleton loader for mobile-only section -->
+  <div class="d-flex gap-3 mobile-only">
+    <div class="bg-state stat-container  d-flex flex-column align-items-center justify-content-center p-3 rounded skeleton">
+      <p-skeleton width="60%" height="12px" styleClass="fade-in mb-2"></p-skeleton>
+      <p-skeleton width="80%" height="12px" styleClass="fade-in"></p-skeleton>
+    </div>
+    <div class="bg-state stat-container  d-flex flex-column align-items-center justify-content-center p-3 rounded skeleton">
+      <p-skeleton width="60%" height="12px" styleClass="fade-in mb-2"></p-skeleton>
+      <p-skeleton width="80%" height="12px" styleClass="fade-in"></p-skeleton>
+    </div>
+  </div>
+  }
+  
 </div>
 
 <!-- Afternoon shift components -->

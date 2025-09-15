@@ -1,0 +1,23 @@
+.sidebar {
+    display: flex;
+    flex-direction: column; 
+    height: 100vh;         
+  
+    @media (max-width: 576px) { 
+        display: inherit !important;
+
+      }
+    
+    .sidebar-user {
+      margin-top: auto; 
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0px 15px;
+  
+      img {
+        width: 50px;
+      }
+    }
+  }
+  

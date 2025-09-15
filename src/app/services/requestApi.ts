@@ -13,7 +13,8 @@ export class Service {
   private usersApiUrl = 'http://localhost:3000/users';
   private rolesApiUrl = 'http://localhost:3000/roles';
   private departmentsApiUrl = 'http://localhost:3000/departments';
-
+  private mobileStatsApiUrl = 'http://localhost:3000/mobileStats';
+  
   constructor(private http: HttpClient) { }
 
   getChartStats(): Observable<ChartStat[]> {
@@ -47,6 +48,11 @@ export class Service {
 
   getDepartments(): Observable<Department[]> {
     return this.http.get<Department[]>(this.departmentsApiUrl);
+  }
+
+
+  getMobileStats(): Observable<CountStat[]> {
+    return this.http.get<CountStat[]>(this.mobileStatsApiUrl);
   }
 
 }

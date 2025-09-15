@@ -29,6 +29,7 @@ export interface AfternoonShiftVehicle {
   sim: string;
   fleet: string;
   status: string;
+  activeAction?: action;
 }
 
 export interface User {
@@ -61,4 +62,12 @@ export interface Department {
 export interface action {
     name: string;
 
+}
+
+
+export interface CountStat {
+  id: string;
+  count: number; 
+  value?: string; 
+  label: string;
 }

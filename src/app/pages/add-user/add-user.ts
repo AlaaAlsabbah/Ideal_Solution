@@ -53,70 +53,64 @@ export class AddUser implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('AddUser: ngOnInit started');
     this.userForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       middleName: [''],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
-      rfid: [''],
+      rfid: [''], 
+      rfidEnabled: [true],
       role: ['', Validators.required],
       department: ['', Validators.required],
       fleet: ['']
     });
-
+  
     combineLatest([
       this.service.getUsers(),
       this.service.getRoles(),
       this.service.getDepartments(),
-      timer(1500) 
+      timer(1500)
     ]).subscribe({
       next: ([users, roles, departments]) => {
-        console.log('AddUser: Data fetched successfully', { users, roles, departments });
         this.roles = roles;
         this.departments = departments;
-
+  
         if (users && users.length > 0) {
           const user = users[0];
           this.userId = user.id;
+  
           this.userForm.patchValue(user);
+  
+          this.rfidReadonly = this.userForm.get('rfidEnabled')?.value;
+  
           this.uploadedImage = user.image || null;
-          console.log('AddUser: Form prefilled with user', user);
         }
-        this.isLoading = false; 
-      },
-      error: (err) => {
-        console.error('AddUser: Error fetching data', err);
-        Swal.fire({
-          title: 'Error',
-          text: 'Failed to load data. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-          background: '#1e2230',
-          color: '#c7c7d3',
-          confirmButtonColor: '#28a745'
-        });
-        this.isLoading = false; 
+        this.isLoading = false;
       }
     });
+  
+    this.userForm.get('rfidEnabled')?.valueChanges.subscribe((checked) => {
+      this.rfidReadonly = checked; 
+    });
   }
+  
+  rfidReadonly: boolean = false;
+  
+  
 
   onImageUpload(event: any) {
-    console.log('AddUser: Image upload triggered', event);
     const file: File = event.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.uploadedImage = e.target?.result ?? null;
-        console.log('AddUser: Image loaded', this.uploadedImage);
       };
       reader.readAsDataURL(file);
     }
   }
 
   onSubmit() {
-    console.log('AddUser: onSubmit triggered', this.userForm.value);
     if (!this.userForm.valid) {
       const errors: string[] = [];
       if (this.userForm.get('firstName')?.hasError('required')) {
@@ -141,7 +135,6 @@ export class AddUser implements OnInit {
         errors.push('Department is required');
       }
 
-      console.log('AddUser: Validation errors', errors);
       Swal.fire({
         title: 'Validation Error',
         html: errors.join('<br>') || 'Please fill all required fields',
@@ -160,13 +153,11 @@ export class AddUser implements OnInit {
       id: this.userId || Date.now().toString(),
       image: this.uploadedImage ? this.uploadedImage.toString() : ''
     };
-    console.log('AddUser: Submitting user data', userData);
 
     this.isLoading = true; 
     if (this.userId) {
       this.service.updateUser(this.userId, userData).subscribe({
         next: (response) => {
-          console.log('AddUser: User updated successfully', response);
           Swal.fire({
             title: 'Success',
             text: 'User updated successfully',
@@ -178,7 +169,6 @@ export class AddUser implements OnInit {
             color: '#c7c7d3'
           });
           setTimeout(() => {
-            console.log('AddUser: Navigating to /dashboard after delay');
             this.router.navigate(['/dashboard']);
           }, 3000); 
         },
@@ -199,7 +189,6 @@ export class AddUser implements OnInit {
     } else {
       this.service.createUser(userData).subscribe({
         next: (response) => {
-          console.log('AddUser: User created successfully', response);
           Swal.fire({
             title: 'Success',
             text: 'User created successfully',
@@ -211,7 +200,6 @@ export class AddUser implements OnInit {
             color: '#c7c7d3'
           });
           setTimeout(() => {
-            console.log('AddUser: Navigating to /dashboard after delay');
             this.router.navigate(['/dashboard']);
           }, 3000);
         },
@@ -233,7 +221,6 @@ export class AddUser implements OnInit {
   }
 
   onCancel() {
-    console.log('AddUser: onCancel triggered');
     this.router.navigate(['/dashboard']);
   }
 }
