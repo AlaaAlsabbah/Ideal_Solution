@@ -6,9 +6,12 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 Before starting, please run the following commands in order::
 
-npm install
+npm install     
+
 npx json-server --watch db.json --port 3000
+
 npm install json-server --save-dev
+
 npm start
 
 
